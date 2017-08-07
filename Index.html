@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="goodsApp"  ng-controller="formAppearCtrl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>goods arrangement</title>
+    <link rel="stylesheet" type="text/css" href="css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome/css/font-awesome.css">
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script src="Libraries/angular.js"></script>
+    <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/goodsApp.js"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row" ng-style="passwordStyle" ng-class="pasClass">
+            <div class="col-xs-6 col-xs-offset-3 col-sm-5 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-2 col-lg-offset-5 passWindow">
+                <form class="form-horizontal" ng-style="passwordStyle">
+                    <input type="text" class="form-control" id="inputLogin" ng-model="login" ng-change="changePas()" placeholder="login">
+                    <input type="password" class="form-control" id="inputPassword" ng-model="password" ng-change="changePas() "placeholder="password">
+                    <input type="submit" name="log" ng-click="enterPas()" value="enter" ng-disabled="dis">
+                    <input type="button" name="pas" ng-click="closePswdWindow()" value="close">
+                    <div class="hint">password:password, <wbr>login:login for this example</div>
+                </form>
+            </div>
+        </div>
+        <div class="row"  ng-style="modalStyle" ng-class="modalClass">
+            <span id="closeForm" ng-click="closeForm()"><i class="fa fa-times" aria-hidden="true"></i></span>
+            <div class="col-xs-12">
+                <form class="form-horizontal" id="addItem" name="add" style="display:none" ng-style="formStyle" novalidate>
+                    <div class="form-group heightForGroup">
+                        <label for="inputName" class="col-xs-2 col-xs-offset-1 col-sm-2 col-sm-offset-2 col-md-2 col-md-offset-2 col-lg-1 col-lg-offset-4 control-label">name</label>
+                        <div class="col-xs-6 col-sm-4 col-md-4 col-lg-2">
+                            <input type="text" class="form-control" name="name" id="inputName" ng-model="name"  ng-minlength="2" required placeholder="">
+                            <div class='help-block' ng-show='add.name.$error.minlength||add.name.$pristine||add.name.$invalid'>name length must be 2 characters at least</div>
+                            <div class='help-block' ng-show='add.name.$valid'></div>
+                        </div>
+                    </div>
+                    <div class="form-group heightForGroup">
+                        <label for="inputCategory" class="col-xs-2 col-xs-offset-1 col-sm-2 col-sm-offset-2 col-md-2 col-md-offset-2 col-lg-1 col-lg-offset-4 control-label">cate<wbr>gory</label>
+                        <div class="col-xs-6 col-sm-4 col-md-4 col-lg-2">
+                            <select class="form-control col-xs-4" id="inputCategory" ng-model="category">
+                                <option id="food">food</option>
+                                <option id="clothes">clothes</option>
+                                <option id="technics">technics</option>
+                                <option id="sport">sport</option>
+                                <option id="drinks">drinks</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group heightForGroup">
+                        <label for="inputPrice" class="col-xs-2 col-xs-offset-1 col-sm-2 col-sm-offset-2 col-md-2 col-md-offset-2 col-lg-1 col-lg-offset-4 control-label">price</label>
+                        <div class="col-xs-6 col-sm-4 col-md-4 col-lg-2">
+                            <input type="text" name="price" ng-pattern="/^[0-9.,]+$/" class="form-control" id="inputPrice" ng-model="price" placeholder="0.0" required>
+                            <div class='help-block' ng-show='add.price.$error.pattern||add.price.$pristine||add.price.$invalid'>enter the number</div>
+                            <div class='help-block' ng-show='add.price.$valid'></div>
+                        </div>
+                    </div>
+                    <div class="form-group heightForGroup">
+                        <label for="inputQuant" class="col-xs-2 col-xs-offset-1 col-sm-2 col-sm-offset-2 col-md-2 col-md-offset-2 col-lg-1 col-lg-offset-4 control-label">quan<wbr>tity</label>
+                        <div class="input-group col-xs-6 col-sm-4 col-md-4 col-lg-2 quantity">
+                            <input type="text" class="form-control" id="inputQuant" ng-model="quantity" placeholder="0">
+                            <span class="input-group-addon point" ng-click="incrQuant()" ng-mousedown="addColor()" ng-mouseup="oldColor()" ng-class="classNameInc"><i class="fa fa-caret-up" aria-hidden="true"></i></span>
+                            <span class="input-group-addon point" ng-click="decrQuant()" ng-mousedown="addColorDec()" ng-mouseup="oldColorDec()" ng-class="classNameDec"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+                        </div>
+                    </div>
+                    <div class="form-group heightForGroup">
+                        <label for="addDate" class="col-xs-2 col-xs-offset-1 col-sm-2 col-sm-offset-2 col-md-2 col-md-offset-2 col-lg-1 col-lg-offset-4 control-label">date</label>
+                        <div class="col-xs-6 col-sm-4 col-md-4 col-lg-2">
+                            <input type="text" name="addDate" class="form-control" id="addDate" ng-model="date" ng-pattern="/\d{4}[\s\/]\d{2}[\s\/]\d{2}/" placeholder="YYYY/MM/DD" required>
+                            <div class='help-block' ng-show='add.addDate.$error.pattern||add.addDate.$pristine||add.addDate.$invalid'>enter the date in format YYYY/MM/DD, 1998/05/14 for example</div>
+                            <div class='help-block' ng-show='add.addDate.$valid'></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-offset-4 col-xs-4 col-sm-offset-5 col-sm-2">
+                            <input type="submit" name="send_the_form" ng-click="addRow()" ng-disabled="add.$invalid" ng-class="add.$invalid ? 'disColor' : 'enabColor'" value="accept">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-2 col-sm-3 forCat">
+                    <div class="categories">cat<span class="hideIcon">egories</span></div>
+                    <div class="list-group">
+                        <button type="button" class="list-group-item" ng-click="showMain()"><span class="hideIcon">main</span><span class="displayIcon"><i class="fa fa-home" aria-hidden="true"></i></span></button>
+                        <button type="button" class="list-group-item" ng-click="showFood()"><span class="hideIcon">food</span><span class="displayIcon"><i class="fa fa-lemon-o" aria-hidden="true"></i></span></button>
+                        <button type="button" class="list-group-item" ng-click="showClothes()"><span class="hideIcon">clothes</span><span class="displayIcon"><i class="fa fa-user-secret" aria-hidden="true"></i></span></button>
+                        <button type="button" class="list-group-item" ng-click="showTechnics()"><span class="hideIcon">technics</span><span class="displayIcon"><i class="fa fa-camera-retro" aria-hidden="true"></i></span></button>
+                        <button type="button" class="list-group-item" ng-click="showSport()"><span class="hideIcon">sport</span><span class="displayIcon"><i class="fa fa-futbol-o" aria-hidden="true"></i></span></button>
+                        <button type="button" class="list-group-item" ng-click="showDrinks()"><span class="hideIcon">drinks</span><span class="displayIcon"><i class="fa fa-glass" aria-hidden="true"></i></span></button>
+                    </div>
+                </div>
+                <div class="col-xs-10 col-sm-9 mainWindow">
+                    <div class="btn-group col-xs-8 navButtons">
+                        <button type="button" class="btn btn-default" ng-click="openForm()"><i class="fa fa-plus" aria-hidden="true"></i><span class="navText"> add new article</span></button>
+                        <button type="button" class="btn btn-default" ng-click="passwordForRemove()" ng-show="editAppear"><i class="fa fa-pencil-square-o" aria-hidden="true"></i><span class="navText"> edit item</span></button>
+                        <button type="button" class="btn btn-default" ng-click="saveChanges()" ng-show="saveAppear"><i class="fa fa-floppy-o" aria-hidden="true"></i><span class="navText"> save changes</span></button>
+                        <button type="button" class="btn btn-default" ng-click="findItem()"><i class="fa fa-search" aria-hidden="true"></i><span class="navText"> find item</span></button>
+                    </div>
+                    <div class="input-group col-xs-4 findPanel">
+                        <input type="text" class="form-control" id="findName" ng-model="findName" ng-style="findStyle" placeholder="">
+                        <span class="input-group-addon" ng-click="findEventClose()" ng-style="findStyle"><i class="fa fa-times" aria-hidden="true"></i></span>
+                    </div>
+                    <div class="col-xs-12 divTable">
+                        <div ng-include="url" ng-init="url='main.html'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
